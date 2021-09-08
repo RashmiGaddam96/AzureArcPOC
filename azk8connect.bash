@@ -78,8 +78,8 @@ logAnalyticsKeyEncWithSpace=$(printf %s $logAnalyticsKey | base64)
 logAnalyticsKeyEnc=$(echo -n "${logAnalyticsKeyEncWithSpace//[[:space:]]/}") # Needed for the next step
 
 extensionName="appservice-ext" # Name of the App Service extension
-# namespace="appservice-ns" # Namespace in your cluster to install the extension and provision resources
-# kubeEnvironmentName="appservicekubeEnvironment" # Name of the App Service Kubernetes environment resource
+namespace="appservice-ns" # Namespace in your cluster to install the extension and provision resources
+kubeEnvironmentName="appservicekubeEnvironment" # Name of the App Service Kubernetes environment resource
 # staticIp=$(az network public-ip show --resource-group $groupName --name "${clusterName}-IP" --output tsv --query ipAddress)
 
 echo "Creating App service kubernetes extension"
