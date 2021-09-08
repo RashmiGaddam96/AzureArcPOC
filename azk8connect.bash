@@ -1,5 +1,3 @@
-#!/bin/bash
-
 export location=$LOCATION
 export resourceGroup=$RESOURCEGROUP
 export clusterName=$CLUSTERNAME
@@ -79,10 +77,10 @@ logAnalyticsKey=$(az monitor log-analytics workspace get-shared-keys \
 logAnalyticsKeyEncWithSpace=$(printf %s $logAnalyticsKey | base64)
 logAnalyticsKeyEnc=$(echo -n "${logAnalyticsKeyEncWithSpace//[[:space:]]/}") # Needed for the next step
 
-# extensionname="appservice-ext" # name of the app service extension
-# namespace="appservice-ns" # namespace in your cluster to install the extension and provision resources
-# kubeenvironmentname="appservicekubeenvironmentrashmi" # name of the app service kubernetes environment resource
-# # staticip=$(az network public-ip show --resource-group $resourceGroupName --name "${clusterName}-IP" --output tsv --query ipAddress)
+extensionName="appservice-ext" # Name of the App Service extension
+# namespace="appservice-ns" # Namespace in your cluster to install the extension and provision resources
+# kubeEnvironmentName="appservicekubeEnvironment" # Name of the App Service Kubernetes environment resource
+# staticIp=$(az network public-ip show --resource-group $groupName --name "${clusterName}-IP" --output tsv --query ipAddress)
 
 echo "Creating App service kubernetes extension"
 az k8s-extension create \
