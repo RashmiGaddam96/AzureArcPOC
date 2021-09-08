@@ -5,7 +5,7 @@ export resourceGroup=$RESOURCEGROUP
 export clusterName=$CLUSTERNAME
 export arcClusterName="${clusterName}-arcCluster"
 export workspaceName=$WORKSPACENAME
-export resourceGroupName=$resourceGroup
+export groupName=$resourceGroup
 export customLocationName=$CUSTOMLOCATIONNAME
 export extensionName=$EXTENSIONNAME # Name of the App Service extension
 export namespace=$NAMESPACE # Namespace in your cluster to install the extension and provision resources
@@ -61,18 +61,18 @@ echo "Connecting the cluster to Azure Arc"
 az connectedk8s connect --name $arcClusterName --resource-group $resourceGroup --custom-locations-oid "b7e7a93e-8ac8-40e5-a246-34ebd7ed40c9" --distribution "aks" --infrastructure "azure"
 
 echo "Creating an Public IP"
-infra_rg=$(az aks show --resource-group $resourceGroupName --name $clusterName --output tsv --query nodeResourceGroup)
+infra_rg=$(az aks show --resource-group $groupName --name $clusterName --output tsv --query nodeResourceGroup)
 az network public-ip create --resource-group $infra_rg --name MyPublicIP --sku STANDARD
 staticIp=$(az network public-ip show --resource-group $infra_rg --name MyPublicIP --output tsv --query ipAddress)
 
 logAnalyticsWorkspaceId=$(az monitor log-analytics workspace show \
-    --resource-group $resourceGroupName \
+    --resource-group $groupName \
     --workspace-name $workspaceName \
     --query customerId \
     --output tsv)
 logAnalyticsWorkspaceIdEnc=$(printf %s $logAnalyticsWorkspaceId | base64) # Needed for the next step
 logAnalyticsKey=$(az monitor log-analytics workspace get-shared-keys \
-    --resource-group $resourceGroupName \
+    --resource-group $groupName \
     --workspace-name $workspaceName \
     --query primarySharedKey \
     --output tsv)
@@ -86,7 +86,7 @@ logAnalyticsKeyEnc=$(echo -n "${logAnalyticsKeyEncWithSpace//[[:space:]]/}") # N
 
 echo "Creating App service kubernetes extension"
 az k8s-extension create \
-    --resource-group $resourceGroupName \
+    --resource-group $groupName \
     --name $extensionName \
     --cluster-type connectedClusters \
     --cluster-name $arcClusterName \
@@ -103,35 +103,35 @@ az k8s-extension create \
     --configuration-settings "buildService.storageClassName=default" \
     --configuration-settings "buildService.storageAccessMode=ReadWriteOnce" \
     --configuration-settings "customConfigMap=${namespace}/kube-environment-config" \
-    --configuration-settings "envoy.annotations.service.beta.kubernetes.io/azure-load-balancer-resource-group=${resourceGroupName}" \
+    --configuration-settings "envoy.annotations.service.beta.kubernetes.io/azure-load-balancer-resource-group=${groupName}" \
     --configuration-settings "logProcessor.appLogs.destination=log-analytics" \
     --configuration-protected-settings "logProcessor.appLogs.logAnalyticsConfig.customerId=${logAnalyticsWorkspaceIdEnc}" \
     --configuration-protected-settings "logProcessor.appLogs.logAnalyticsConfig.sharedKey=${logAnalyticsKeyEnc}"
 
-extensionId=$(az k8s-extension show --cluster-type connectedClusters --cluster-name $arcClusterName --resource-group $resourceGroupName --name $extensionName --query id --output tsv)
+extensionId=$(az k8s-extension show --cluster-type connectedClusters --cluster-name $arcClusterName --resource-group $groupName --name $extensionName --query id --output tsv)
 echo extensionId: $extensionId
 
 az resource wait --ids ${extensionId} --custom "properties.installState!='Pending'" --api-version "2020-07-01-preview"
 
 
 echo "Creating custom location"
-connectedClusterId=$(az connectedk8s show --resource-group $resourceGroupName --name $arcClusterName --query id --output tsv)
+connectedClusterId=$(az connectedk8s show --resource-group $groupName --name $arcClusterName --query id --output tsv)
 az customlocation create \
-    --resource-group $resourceGroupName \
+    --resource-group $groupName \
     --name $customLocationName \
     --host-resource-id ${connectedClusterId} \
     --namespace $namespace \
     --cluster-extension-ids $extensionId
 
 customLocationId=$(az customlocation show \
-    --resource-group $resourceGroupName \
+    --resource-group $groupName \
     --name $customLocationName \
     --query id \
     --output tsv)
 
 echo "App Service Kubernetes environment"
 az appservice kube create \
-    --resource-group $resourceGroupName \
+    --resource-group $groupName \
     --name $kubeEnvironmentName \
     --custom-location $customLocationId \
     --static-ip $staticIp
