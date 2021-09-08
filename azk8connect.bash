@@ -62,8 +62,8 @@ az connectedk8s connect --name $arcClusterName --resource-group $resourceGroup -
 
 echo "Creating an Public IP"
 infra_rg=$(az aks show --resource-group $resourceGroupName --name $clusterName --output tsv --query nodeResourceGroup)
-az network public-ip create --resource-group $infra_rg --name "${clusterName}-IP" --sku wq
-staticIp=$(az network public-ip show --resource-group $infra_rg --name "${clusterName}-IP" --output tsv --query ipAddress)
+az network public-ip create --resource-group $infra_rg --name MyPublicIP --sku STANDARD
+staticIp=$(az network public-ip show --resource-group $infra_rg --name MyPublicIP --output tsv --query ipAddress)
 
 logAnalyticsWorkspaceId=$(az monitor log-analytics workspace show \
     --resource-group $resourceGroupName \
