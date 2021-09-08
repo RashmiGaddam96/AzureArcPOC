@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "aks-demo-test"
+        },
+        "dnsPrefix": {
+            "value": "aksdemotest"
+        },        
+         "linuxAdminUsername": {
+            "value": "rashmiuser"
+        },
+        "sshRSAPublicKey": {
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDJqoVKaxlnNwlPcEfAWtud1mgITsL3MRbSdjsR/qxM7DMLljigzXG2iawivBgm4N6b6hLRzXZvn+yvFMmzln8CY1I/RcEJ+SKxJE6bpjyF76gDdNL6XjWaWyGLxe8T0azZThpBZDRhOJeoEavu5znJMBrPf8vTQ9Vj+8y2kh6t3zFv1Ka94OyqDH1Pehylr8DVKY+eSfn0or08GPNNkjhppmNogP52BEoS/LSYaIInaPU/CPlvzcPFkavakwW/ar2jeZMk9lkF/RL929EB+nByKbRbxRBfzlJqf0x4mCe1pUdKgnzfVmq3K8I0INcSDrH0zGAlTRMFd4+2giHF0K9y5C4DfqiDNYOoCuiRIUsxQdtLci1af0rV8kM+mPbw3Ad9KWKdASKZ6KBrXYz3bo1iknDQm7FNMCYeic6RjLDfOBlqRmgRC4KplCtsKBFMFf6QhS0LCCJ4aeBE8sQiTXq/8ykIJjFwbdauAVjkPsTO3ghJvAzHUX8Z9AjQFh8GlOk="
+        },
+        "kubernetesVersion": {
+            "value": "1.20.9"
+        },
+        "tenantID":  { "value": "da464968-10f5-4b7b-8217-d6ab822e3949" },
+        "omsWorkspaceName": { "value": "omsloganalytics" },
+        "omsServiceTier": { "value": "Standalone" }
+    }
+}
