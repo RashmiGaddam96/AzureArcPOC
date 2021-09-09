@@ -5,8 +5,6 @@ export arcClusterName="${clusterName}-arcCluster"
 export workspaceName=$WORKSPACENAME
 export groupName=$resourceGroup
 export customLocationName=$CUSTOMLOCATIONNAME
-export extensionName=$EXTENSIONNAME # Name of the App Service extension
-export namespace=$NAMESPACE # Namespace in your cluster to install the extension and provision resources
 export kubeEnvironmentName=$KUBEENVIRONMENTNAME # Name of the App Service Kubernetes environment resource --needs to be unique for every deployment
 
 # Getting AKS credentials
@@ -79,7 +77,7 @@ logAnalyticsKeyEnc=$(echo -n "${logAnalyticsKeyEncWithSpace//[[:space:]]/}") # N
 
 extensionName="appservice-ext" # Name of the App Service extension
 namespace="appservice-ns" # Namespace in your cluster to install the extension and provision resources
-kubeEnvironmentName="appservicekubeEnvironment" # Name of the App Service Kubernetes environment resource
+# kubeEnvironmentName="appservicekubeEnvironment" # Name of the App Service Kubernetes environment resource
 # staticIp=$(az network public-ip show --resource-group $groupName --name "${clusterName}-IP" --output tsv --query ipAddress)
 
 echo "Creating App service kubernetes extension"
