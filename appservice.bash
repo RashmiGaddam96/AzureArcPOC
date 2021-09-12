@@ -27,15 +27,16 @@ echo "Creating Azure App Resource Group"
 if [ $(az group exists --name $appresourceGroup) = false ]; then
     az group create --name $appresourceGroup --location $location
 fi
+echo "Creating App Plan"
 az appservice plan create -g $appresourceGroup -n $myPlanName \
     --custom-location $customLocationId \
     --per-site-scaling --is-linux --sku K1
 
-az webapp create \
-    --plan $myPlanName \
-    --resource-group $appresourceGroup \
-    --name $webAppName \
-    --custom-location $customLocationId \
-    --runtime 'DOTNET|5.0'
+# az webapp create \
+#    --plan $myPlanName \
+#    --resource-group $appresourceGroup \
+ #   --name $webAppName \
+#    --custom-location $customLocationId \
+#    --runtime 'DOTNET|5.0'
 
 # az webapp deployment source config-zip --resource-group $appresourceGroup --name $webAppName --src package.zip
