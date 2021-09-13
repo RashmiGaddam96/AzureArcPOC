@@ -11,7 +11,7 @@ export appresourceGroup="${resourceGroup}-AppService"
 export webAppName=$WEBAPPNAME
 export myPlanName=$MYPLANNAME
 
-
+sleep 2m
 az config set extension.use_dynamic_install=yes_without_prompt
 az extension add --upgrade --yes --name customlocation
 az extension remove --name appservice-kube
