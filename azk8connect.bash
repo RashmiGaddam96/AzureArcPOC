@@ -6,6 +6,7 @@ export workspaceName=$WORKSPACENAME
 export groupName=$resourceGroup
 export customLocationName=$CUSTOMLOCATIONNAME
 export kubeEnvironmentName=$KUBEENVIRONMENTNAME # Name of the App Service Kubernetes environment resource --needs to be unique for every deployment
+export customLocationsOid = $CUSTOMLOCATIONSOID
 
 # Getting AKS credentials
 echo "Getting AKS credentials (kubeconfig)"
@@ -54,7 +55,7 @@ if [ $(az group exists --name $resourceGroup) = false ]; then
     az group create --name $resourceGroup --location $location
 fi
 echo "Connecting the cluster to Azure Arc"
-az connectedk8s connect --name $arcClusterName --resource-group $resourceGroup --custom-locations-oid "b7e7a93e-8ac8-40e5-a246-34ebd7ed40c9" --distribution "aks" --infrastructure "azure"
+az connectedk8s connect --name $arcClusterName --resource-group $resourceGroup --custom-locations-oid $customLocationsOid --distribution "aks" --infrastructure "azure"
 
 echo "Creating an Public IP"
 infra_rg=$(az aks show --resource-group $groupName --name $clusterName --output tsv --query nodeResourceGroup)
